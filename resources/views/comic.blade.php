@@ -11,21 +11,25 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container my-4">
         <div class="row">
-            <div class="col-6">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="..." alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title"> {{ $comic->title }}</h5>
-                        <p class="card-text">{{ $comic->description }}</p>
+            <div class="col-12 d-flex justify-content-center">
+                <div class="comic-container">
+                    <div class="comic-img">
+                        <img class="h-100" src="{{ $comic->thumb }}" alt=" {{ $comic->title }} card image">
                     </div>
+                    <h5> {{ $comic->title }}</h5>
+                    <p>{{ $comic->description }}</p>
                 </div>
-
-
             </div>
         </div>
+
+        <div class="back-button">
+            <a href="{{ route('comics.index') }}"> Go Back </a>
+        </div>
     </div>
+
+
 
 </body>
 </html>
