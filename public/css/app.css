@@ -12627,3 +12627,13 @@ fieldset:disabled .btn {
   }
 }
 
+.comic-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.comic-container .comic-img {
+  width: 300px;
+  height: 300px;
+}
+
