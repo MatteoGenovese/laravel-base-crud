@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container my-4">
         <div class="row">
         <table class="table table-sm table-dark table-hover table-striped w-100">
             <thead>
@@ -26,7 +26,9 @@
                 @forelse ($comics as $comic)
                     <tr>
                         <td scope="row">{{ $comic->id }}</td>
-                        <td>{{ $comic->title }}</td>
+                        <td>
+                            <a href="{{ route('comics.show', $comic) }}"> {{ $comic->title }} </a>
+                        </td>
                         <td>{{ $comic->description }}</td>
                         <td>{{ $comic->price }}</td>
                         <td>{{ $comic->series }}</td>
