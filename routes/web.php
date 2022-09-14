@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index')->name('home.index');
 
-Route::get('/comic', 'ComicController@index')->name('comics.index');
 
+
+Route::get('/comic', 'ComicController@index')->name('comics.index');
 Route::get('/comics/{comic}', 'ComicController@show')->name('comics.show');
+
+
+Route::get('/signup', 'UserController@create')->name('newUser.create');
 
 // Route::resource('/comics', 'ComicController');
 
