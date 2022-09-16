@@ -41,23 +41,20 @@ class ComicController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-
         $sentData= $request->all();
 
         $comic = new Comic();
-
-        $comic->title= $sentData['title'];
-        $comic->description= $sentData['description'];
-        $comic->thumb= $sentData['thumb'];
-        $comic->price= $sentData['price'];
-        $comic->series= $sentData['series'];
-        $comic->sale_date= $sentData['sale_date'];
-        $comic->type= $sentData['type'];
+        // $comic->title= $sentData['title'];
+        // $comic->description= $sentData['description'];
+        // $comic->thumb= $sentData['thumb'];
+        // $comic->price= $sentData['price'];
+        // $comic->series= $sentData['series'];
+        // $comic->sale_date= $sentData['sale_date'];
+        // $comic->type= $sentData['type'];
 
         $lastID = Comic::query()->orderBy('id', 'desc')->first();
-        $comic->slug = Str::slug( $sentData['title'] , '-') . "-" . ( $lastID->id +1 );
-
-        $comic->save();
+        $sentData['slug'] = Str::slug( $sentData['title'] , '-') . "-" . ( $lastID->id +1 );
+        $comic->create($sentData);
 
         return redirect()->route('comics.index',compact('comic'));
     }
@@ -86,8 +83,6 @@ class ComicController extends Controller
         //
         $comic = Comic::where('slug', $slug)->first();
         return view('comics.comicEdit', compact('comic'));
-
-
     }
 
     /**
@@ -104,24 +99,20 @@ class ComicController extends Controller
 
         $comic = Comic::where('slug', $slug)->first();
 
-        $comic->title= $sentData['title'];
-        $comic->description= $sentData['description'];
-        $comic->thumb= $sentData['thumb'];
-        $comic->price= $sentData['price'];
-        $comic->series= $sentData['series'];
-        $comic->sale_date= $sentData['sale_date'];
-        $comic->type= $sentData['type'];
+
+        // $comic->title= $sentData['title'];
+        // $comic->description= $sentData['description'];
+        // $comic->thumb= $sentData['thumb'];
+        // $comic->price= $sentData['price'];
+        // $comic->series= $sentData['series'];
+        // $comic->sale_date= $sentData['sale_date'];
+        // $comic->type= $sentData['type'];
 
 
-        $comic->slug = Str::slug( $sentData['title'] , '-') . "-" . ( $comic->id );
-
-        $comic->save();
-
-
+        $sentData['slug'] = Str::slug( $sentData['title'] , '-') . "-" . ( $comic->id );
+        $comic->update($sentData);
 
         return redirect()->route('comics.show', $comic->slug);
-
-
     }
 
     /**
@@ -132,11 +123,8 @@ class ComicController extends Controller
     public function destroy($slug)
     {
         //
-
-
         $comic = Comic::where('slug', $slug)->first();
         Comic::destroy($comic->id);
-
         return redirect()->route('comics.index');
     }
 }
