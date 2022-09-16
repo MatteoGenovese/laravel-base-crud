@@ -27,16 +27,16 @@
                 <tr>
                     <td scope="row">{{ $comic->id }}</td>
                     <td>
-                        <a href="{{ route('comics.show', $comic) }}"> {{ $comic->title }} </a>
+                        <a href="{{ route('comics.show', $comic->slug) }}"> {{ $comic->title }} </a>
                     </td>
                     <td>{{ $comic->description }}</td>
                     <td>{{ $comic->price }}</td>
                     <td>{{ $comic->series }}</td>
                     <td>{{ $comic->type }}</td>
                     <td>
-                        {{-- <a href="{{ route('comics.create') }}" class="btn btn-light">
+                        <a href="{{ route('comics.edit', $comic->slug) }}" class="btn btn-light">
                         edit
-                        </a> --}}
+                        </a>
                     </td>
                 </tr>
             @empty
