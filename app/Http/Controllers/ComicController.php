@@ -97,19 +97,46 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         //
+        $sentData= $request->all();
+
+        $comic = Comic::where('slug', $slug)->first();
+
+        $comic->title= $sentData['title'];
+        $comic->description= $sentData['description'];
+        $comic->thumb= $sentData['thumb'];
+        $comic->price= $sentData['price'];
+        $comic->series= $sentData['series'];
+        $comic->sale_date= $sentData['sale_date'];
+        $comic->type= $sentData['type'];
+
+
+        $comic->slug = Str::slug( $sentData['title'] , '-') . "-" . ( $comic->id );
+
+        $comic->save();
+
+
+
+        return redirect()->route('comics.show', $comic->slug);
+
+
     }
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
         //
+
+
+        $comic = Comic::where('slug', $slug)->first();
+        Comic::destroy($comic->id);
+
+        return redirect()->route('comics.index');
     }
 }
