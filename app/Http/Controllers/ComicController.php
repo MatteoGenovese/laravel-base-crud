@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Comic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class ComicController extends Controller
 {
@@ -16,7 +18,7 @@ class ComicController extends Controller
     {
         //
         $comics = Comic::all();
-        return view('comicList', compact('comics'));
+        return view('comics.comicList', compact('comics'));
     }
 
     /**
@@ -27,7 +29,7 @@ class ComicController extends Controller
     public function create()
     {
         //
-        return view('comicCreate');
+        return view('comics.comicCreate');
     }
 
     /**
@@ -38,7 +40,26 @@ class ComicController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
+
+        $sentData= $request->all();
+
+        $comic = new Comic();
+
+        $comic->title= $sentData['title'];
+        $comic->description= $sentData['description'];
+        $comic->thumb= $sentData['thumb'];
+        $comic->price= $sentData['price'];
+        $comic->series= $sentData['series'];
+        $comic->sale_date= $sentData['sale_date'];
+        $comic->type= $sentData['type'];
+
+        $lastID = Comic::query()->orderBy('id', 'desc')->first();
+        $comic->slug = Str::slug( $sentData['title'] , '-') . "-" . ( $lastID->id +1 );
+
+        $comic->save();
+
+        return redirect()->route('comics.index',compact('comic'));
     }
 
     /**
@@ -47,10 +68,11 @@ class ComicController extends Controller
      * @param  Comic  $comic
      * @return \Illuminate\Http\Response
      */
-    public function show( Comic $comic)
+    public function show( $slug)
     {
         //
-        return view('comic', compact('comic'));
+        $comic = Comic::where('slug', $slug)->first();
+        return view('comics.comic', compact('comic'));
     }
 
     /**
@@ -59,9 +81,13 @@ class ComicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit( $slug)
     {
         //
+        $comic = Comic::where('slug', $slug)->first();
+        return view('comics.comicEdit', compact('comic'));
+
+
     }
 
     /**
