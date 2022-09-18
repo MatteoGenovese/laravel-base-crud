@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Comic;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use illuminate\support\Facades\Date;
 
 
 class ComicController extends Controller
@@ -43,15 +45,29 @@ class ComicController extends Controller
         // dd($request->all());
         $sentData= $request->all();
 
-        $comic = new Comic();
-        // $comic->title= $sentData['title'];
-        // $comic->description= $sentData['description'];
-        // $comic->thumb= $sentData['thumb'];
-        // $comic->price= $sentData['price'];
-        // $comic->series= $sentData['series'];
-        // $comic->sale_date= $sentData['sale_date'];
-        // $comic->type= $sentData['type'];
+        $datetime = new DateTime('tomorrow');
+        $datetime=$datetime->format('Y/m/d');
 
+
+
+
+        $validatedData = $request->validate(
+            [
+            'title' => 'required|min:5|max:255',
+            'description' => 'required|min:5',
+            'thumb' => 'required|starts_with:http',
+            'price' => 'required|numeric',
+            'series' => 'required|min:5',
+            'sale_date' => 'required|date|before:'.$datetime,
+            'type' => 'required',
+            ],
+            [
+                'title.required' => 'The title is very very very required',
+            ],
+        );
+
+
+        $comic = new Comic();
         $lastID = Comic::query()->orderBy('id', 'desc')->first();
         $sentData['slug'] = Str::slug( $sentData['title'] , '-') . "-" . ( $lastID->id +1 );
         $comic->create($sentData);
@@ -99,14 +115,23 @@ class ComicController extends Controller
 
         $comic = Comic::where('slug', $slug)->first();
 
+        $datetime = new DateTime('tomorrow');
+        $datetime=$datetime->format('Y/m/d');
 
-        // $comic->title= $sentData['title'];
-        // $comic->description= $sentData['description'];
-        // $comic->thumb= $sentData['thumb'];
-        // $comic->price= $sentData['price'];
-        // $comic->series= $sentData['series'];
-        // $comic->sale_date= $sentData['sale_date'];
-        // $comic->type= $sentData['type'];
+        $validatedData = $request->validate(
+            [
+            'title' => 'required|min:5|max:255',
+            'description' => 'required|min:5',
+            'thumb' => 'required|starts_with:http',
+            'price' => 'required|numeric',
+            'series' => 'required|min:5',
+            'sale_date' => 'required|date|before:'.$datetime,
+            'type' => 'required',
+            ],
+            [
+                'title.required' => 'The title is very very very required',
+            ],
+        );
 
 
         $sentData['slug'] = Str::slug( $sentData['title'] , '-') . "-" . ( $comic->id );
